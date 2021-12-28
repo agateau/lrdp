@@ -1,23 +1,20 @@
-## Architecture
+## Install
 
-### sqlite database
+```
+poetry shell
+poetry install
+```
 
-#### Table
+## Config file
 
-- podcast
-    - id
-    - date
-    - title
-    - path
-
-### dbcreator.py
-
-    dbcreator.py <podcasts.db> <start_date> <podcasts_dir>
-
-- Rm podcasts.db
-- Create db and table
-- Iterate on all mp3 in podcasts_dir, sorted by name, depth-first, create an entry in podcast table
-
-### feedgen.py
-
-    feedgen.py [--now <date>] <podcasts.rss> <podcasts.db> <podcasts_dir_base_url>
+```
+db_path: "lrdp.db"
+rss_path: "lrdp.rss"
+episodes_dir: "."
+episodes_base_url: "https://example.com/episodes/"
+start_date: "2021-12-25"
+info:
+  name: "Wonderful"
+  description: "This is my wonderful podcast"
+  website: "https://example.com"
+```
