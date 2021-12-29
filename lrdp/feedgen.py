@@ -15,8 +15,10 @@ from lrdp.db import EPISODE_TABLE, Episode
 
 def select_episodes(cursor: Cursor, now: datetime, episode_count) -> Iterator[Episode]:
     now_str = now.strftime("%Y-%m-%d")
-    cursor.execute(f"select * from {EPISODE_TABLE} where date <= ? order by date limit {episode_count}",
-                   (now_str,))
+    cursor.execute(
+        f"select * from {EPISODE_TABLE} where date <= ? order by date limit {episode_count}",
+        (now_str,),
+    )
     for row in cursor.fetchall():
         yield Episode(*row)
 
@@ -38,9 +40,7 @@ def generate_rss(cfg: Config, now: datetime) -> str:
         rel_path = path.relative_to(cfg.episodes_dir)
         url = cfg.episodes_base_url + str(rel_path)
         media = Media(url, path.stat().st_size)
-        episode = PodgenEpisode(
-            title=episode.title,
-            media=media)
+        episode = PodgenEpisode(title=episode.title, media=media)
         podcast.episodes.append(episode)
 
     return podcast.rss_str()
@@ -48,8 +48,8 @@ def generate_rss(cfg: Config, now: datetime) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description=__doc__)
+        formatter_class=argparse.RawDescriptionHelpFormatter, description=__doc__
+    )
 
     parser.add_argument("config", help="Path to the lrdp config file")
     parser.add_argument("--now", help="Override current date")

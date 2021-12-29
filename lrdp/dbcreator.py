@@ -41,8 +41,10 @@ class App:
 
     def add_episode(self, mp3_path: Path) -> None:
         title = get_title(mp3_path)
-        self.cursor.execute(f"insert into {EPISODE_TABLE}(date, title, path) values(?, ?, ?)",
-                            (self.next_date, title, str(mp3_path)))
+        self.cursor.execute(
+            f"insert into {EPISODE_TABLE}(date, title, path) values(?, ?, ?)",
+            (self.next_date, title, str(mp3_path)),
+        )
         self.next_date = compute_next_date(self.next_date)
 
     def finish(self):
@@ -51,8 +53,8 @@ class App:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description=__doc__)
+        formatter_class=argparse.RawDescriptionHelpFormatter, description=__doc__
+    )
 
     parser.add_argument("config", help="Path to the lrdp config file")
 

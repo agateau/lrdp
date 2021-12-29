@@ -13,6 +13,7 @@ class PodcastInfo:
     website: str
     block_itunes: bool = False
 
+
 @dataclass
 class Config:
     podcast: PodcastInfo
@@ -39,13 +40,14 @@ def from_yaml(yaml_path: Path) -> Config:
 
     info = PodcastInfo(**dct["info"])
 
-    cfg = Config(podcast=info,
-                 db_path=yaml_dir.joinpath(dct["db_path"]),
-                 episodes_dir=yaml_dir.joinpath(dct["episodes_dir"]),
-                 episodes_base_url=dct["episodes_base_url"],
-                 start_date=_parse_date(dct["start_date"]),
-                 rss_path=yaml_dir.joinpath(dct["rss_path"]),
-                 )
+    cfg = Config(
+        podcast=info,
+        db_path=yaml_dir.joinpath(dct["db_path"]),
+        episodes_dir=yaml_dir.joinpath(dct["episodes_dir"]),
+        episodes_base_url=dct["episodes_base_url"],
+        start_date=_parse_date(dct["start_date"]),
+        rss_path=yaml_dir.joinpath(dct["rss_path"]),
+    )
     if not cfg.episodes_dir.is_dir():
         raise ValueError(f"{cfg.episodes_dir} is not a directory")
     return cfg

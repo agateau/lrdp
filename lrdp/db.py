@@ -11,6 +11,7 @@ create table {EPISODE_TABLE} (
 )
 """
 
+
 @dataclass
 class Episode:
     id: int
