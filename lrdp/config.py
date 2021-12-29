@@ -12,6 +12,7 @@ class PodcastInfo:
     name: str
     description: str
     website: str
+    block_itunes: bool = False
 
 @dataclass
 class Config:

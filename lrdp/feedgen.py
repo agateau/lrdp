@@ -27,6 +27,7 @@ def generate_rss(cfg: Config, now: datetime.date) -> str:
         description=cfg.podcast.description,
         website=cfg.podcast.website,
         explicit=False,
+        withhold_from_itunes=cfg.podcast.block_itunes,
     )
 
     conn = sqlite3.connect(cfg.db_path)

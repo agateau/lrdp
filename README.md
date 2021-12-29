@@ -13,6 +13,7 @@ rss_path: "lrdp.rss"
 episodes_dir: "."
 episodes_base_url: "https://example.com/episodes/"
 start_date: "2021-12-25"
+block_itunes: true
 info:
   name: "Wonderful"
   description: "This is my wonderful podcast"
