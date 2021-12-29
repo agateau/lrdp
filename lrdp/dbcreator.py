@@ -2,8 +2,8 @@
 (Re-)creates a database for a directory of podcasts.
 """
 import argparse
-import datetime
 import sqlite3
+from datetime import datetime, timedelta
 from pathlib import Path
 from sqlite3 import Cursor
 
@@ -11,9 +11,9 @@ from lrdp.config import Config, from_yaml
 from lrdp.db import EPISODE_TABLE, CREATE_TABLE
 
 
-def compute_next_date(date: datetime.date) -> datetime.date:
+def compute_next_date(date: datetime) -> datetime:
     while True:
-        date += datetime.timedelta(days=1)
+        date += timedelta(days=1)
         if date.weekday() < 5:
             return date
 
@@ -31,7 +31,7 @@ class App:
     def __init__(self, cfg: Config):
         self.conn = sqlite3.connect(cfg.db_path)
         self.cursor = self.conn.cursor()
-        self.next_date = compute_next_date(cfg.start_date - datetime.timedelta(days=1))
+        self.next_date = compute_next_date(cfg.start_date - timedelta(days=1))
 
     def create_table(self) -> None:
         if table_exists(self.cursor, EPISODE_TABLE):

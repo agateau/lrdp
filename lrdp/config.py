@@ -1,6 +1,5 @@
-import datetime
-
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -20,8 +19,15 @@ class Config:
     db_path: Path
     episodes_dir: Path
     episodes_base_url: str
-    start_date: datetime.date
+    start_date: datetime
     rss_path: Path
+
+
+def _parse_date(txt: str) -> datetime:
+    date = datetime.fromisoformat(txt)
+    if date.tzinfo is None:
+        date = date.replace(tzinfo=timezone.utc)
+    return date
 
 
 def from_yaml(yaml_path: Path) -> Config:
@@ -37,7 +43,7 @@ def from_yaml(yaml_path: Path) -> Config:
                  db_path=yaml_dir.joinpath(dct["db_path"]),
                  episodes_dir=yaml_dir.joinpath(dct["episodes_dir"]),
                  episodes_base_url=dct["episodes_base_url"],
-                 start_date=datetime.date.fromisoformat(dct["start_date"]),
+                 start_date=_parse_date(dct["start_date"]),
                  rss_path=yaml_dir.joinpath(dct["rss_path"]),
                  )
     if not cfg.episodes_dir.is_dir():

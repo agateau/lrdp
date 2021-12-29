@@ -1,6 +1,5 @@
-import datetime
-
 from dataclasses import dataclass
+from datetime import datetime
 
 EPISODE_TABLE = "episode"
 CREATE_TABLE = f"""
@@ -15,6 +14,6 @@ create table {EPISODE_TABLE} (
 @dataclass
 class Episode:
     id: int
-    date: datetime.date
+    date: datetime
     title: str
     path: str

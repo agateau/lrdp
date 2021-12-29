@@ -2,8 +2,8 @@
 Generates the feed for the podcasts.
 """
 import argparse
-import datetime
 import sqlite3
+from datetime import datetime, timezone
 from pathlib import Path
 from sqlite3 import Cursor
 from typing import Iterator
@@ -13,7 +13,7 @@ from lrdp.config import from_yaml, Config
 from lrdp.db import EPISODE_TABLE, Episode
 
 
-def select_episodes(cursor: Cursor, now: datetime.date, episode_count) -> Iterator[Episode]:
+def select_episodes(cursor: Cursor, now: datetime, episode_count) -> Iterator[Episode]:
     now_str = now.strftime("%Y-%m-%d")
     cursor.execute(f"select * from {EPISODE_TABLE} where date <= ? order by date limit {episode_count}",
                    (now_str,))
@@ -21,7 +21,7 @@ def select_episodes(cursor: Cursor, now: datetime.date, episode_count) -> Iterat
         yield Episode(*row)
 
 
-def generate_rss(cfg: Config, now: datetime.date) -> str:
+def generate_rss(cfg: Config, now: datetime) -> str:
     podcast = Podcast(
         name=cfg.podcast.name,
         description=cfg.podcast.description,
@@ -59,10 +59,12 @@ def main() -> None:
     cfg = from_yaml(Path(args.config))
 
     if args.now:
-        now = datetime.datetime.strptime(args.now, "%Y-%m-%d")
+        now = datetime.fromisoformat(args.now)
+        if now.tzinfo is None:
+            now = now.replace(tzinfo=timezone.utc)
     else:
-        now = datetime.datetime.now()
+        now = datetime.now(timezone.utc)
 
-    rss_str = generate_rss(cfg, now=now.date())
+    rss_str = generate_rss(cfg, now=now)
     with cfg.rss_path.open("w") as f:
         f.write(rss_str)
