@@ -40,7 +40,7 @@ def generate_rss(cfg: Config, now: datetime) -> str:
         rel_path = path.relative_to(cfg.episodes_dir)
         url = cfg.episodes_base_url + str(rel_path)
         media = Media(url, path.stat().st_size)
-        episode = PodgenEpisode(title=episode.title, media=media)
+        episode = PodgenEpisode(title=episode.title, media=media, publication_date=episode.date)
         podcast.episodes.append(episode)
 
     return podcast.rss_str()
