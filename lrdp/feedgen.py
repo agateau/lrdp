@@ -13,7 +13,7 @@ from lrdp.config import from_yaml, Config
 from lrdp.db import EPISODE_TABLE, Episode
 
 
-def select_episodes(cursor: Cursor, now: datetime, episode_count) -> Iterator[Episode]:
+def select_episodes(cursor: Cursor, now: datetime, episode_count: int) -> Iterator[Episode]:
     now_str = now.strftime("%Y-%m-%d")
     cursor.execute(
         f"select * from {EPISODE_TABLE} where date <= ? order by date limit {episode_count}",

@@ -47,7 +47,7 @@ class App:
         )
         self.next_date = compute_next_date(self.next_date)
 
-    def finish(self):
+    def finish(self) -> None:
         self.conn.commit()
 
 
