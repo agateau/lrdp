@@ -35,7 +35,7 @@ def generate_rss(cfg: Config, now: datetime) -> str:
     conn = sqlite3.connect(cfg.db_path)
     cursor = conn.cursor()
 
-    for episode in select_episodes(cursor, now, episode_count=10):
+    for episode in select_episodes(cursor, now, episode_count=cfg.episode_count):
         path = Path(episode.path)
         rel_path = path.relative_to(cfg.episodes_dir)
         url = cfg.episodes_base_url + str(rel_path)

@@ -22,6 +22,7 @@ class Config:
     episodes_base_url: str
     start_date: datetime
     rss_path: Path
+    episode_count: int
 
 
 def _parse_date(txt: str) -> datetime:
@@ -47,6 +48,7 @@ def from_yaml(yaml_path: Path) -> Config:
         episodes_base_url=dct["episodes_base_url"],
         start_date=_parse_date(dct["start_date"]),
         rss_path=yaml_dir.joinpath(dct["rss_path"]),
+        episode_count=dct.get("episode_count", 20),
     )
     if not cfg.episodes_dir.is_dir():
         raise ValueError(f"{cfg.episodes_dir} is not a directory")
