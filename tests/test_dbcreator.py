@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 import pytest
 
@@ -15,7 +15,7 @@ from lrdp.dbcreator import compute_next_date
     ],
 )
 def test_compute_next_date(current: str, expected: str):
-    current_date = datetime.date.fromisoformat(current)
-    expected_date = datetime.date.fromisoformat(expected)
+    current_date = datetime.fromisoformat(current)
+    expected_date = datetime.fromisoformat(expected)
     next_date = compute_next_date(current_date)
     assert next_date == expected_date
