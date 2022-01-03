@@ -8,7 +8,7 @@ from pathlib import Path
 from sqlite3 import Cursor
 
 from lrdp.config import Config, from_yaml
-from lrdp.db import EPISODE_TABLE, CREATE_TABLE
+from lrdp.db import EPISODE_TABLE, create_tables, add_episode, Episode
 
 
 def compute_next_date(date: datetime) -> datetime:
@@ -37,14 +37,13 @@ class App:
         if table_exists(self.cursor, EPISODE_TABLE):
             self.cursor.execute(f"delete from {EPISODE_TABLE}")
         else:
-            self.cursor.execute(CREATE_TABLE)
+            create_tables(self.cursor)
 
     def add_episode(self, mp3_path: Path) -> None:
-        title = get_title(mp3_path)
-        self.cursor.execute(
-            f"insert into {EPISODE_TABLE}(date, title, path) values(?, ?, ?)",
-            (self.next_date, title, str(mp3_path)),
+        episode = Episode(
+            id=-1, title=get_title(mp3_path), date=self.next_date, path=str(mp3_path)
         )
+        add_episode(self.cursor, episode)
         self.next_date = compute_next_date(self.next_date)
 
     def finish(self) -> None:

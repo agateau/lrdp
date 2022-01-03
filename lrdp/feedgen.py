@@ -20,7 +20,7 @@ def select_episodes(cursor: Cursor, now: datetime, episode_count: int) -> Iterat
         (now_str,),
     )
     for row in cursor.fetchall():
-        yield Episode(*row)
+        yield Episode.from_row(row)
 
 
 def generate_rss(cfg: Config, now: datetime) -> str:
