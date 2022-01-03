@@ -13,13 +13,15 @@ from lrdp.config import from_yaml, Config
 from lrdp.db import EPISODE_TABLE, Episode
 
 
-def select_episodes(cursor: Cursor, now: datetime, episode_count: int) -> Iterator[Episode]:
+def select_episodes(
+    cursor: Cursor, now: datetime, episode_count: int
+) -> Iterator[Episode]:
     now_str = now.strftime("%Y-%m-%d")
     cursor.execute(
-        f"select * from {EPISODE_TABLE} where date <= ? order by date limit {episode_count}",
+        f"select * from {EPISODE_TABLE} where substr(date, 1, 10) <= ? order by date desc limit {episode_count}",
         (now_str,),
     )
-    for row in cursor.fetchall():
+    for row in reversed(cursor.fetchall()):
         yield Episode.from_row(row)
 
 
@@ -40,7 +42,9 @@ def generate_rss(cfg: Config, now: datetime) -> str:
         rel_path = path.relative_to(cfg.episodes_dir)
         url = cfg.episodes_base_url + str(rel_path)
         media = Media(url, path.stat().st_size)
-        episode = PodgenEpisode(title=episode.title, media=media, publication_date=episode.date)
+        episode = PodgenEpisode(
+            title=episode.title, media=media, publication_date=episode.date
+        )
         podcast.episodes.append(episode)
 
     return podcast.rss_str()
