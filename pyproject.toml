@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lrdp"
-version = "0.1.0"
+version = "0.2.0"
 description = "Podcast site generator"
 authors = ["Aurelien Gateau <mail@agateau.com>"]
 license = "GPLv3"
